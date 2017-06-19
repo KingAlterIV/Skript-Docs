@@ -1,0 +1,61 @@
+Njol.ch
+»
+Projects
+»
+SkriptYggdrasilMarkup
+»
+DocumentationTutorialAPIStatistics
+»
+Skript: Custom Commands
+
+EventsConditionsEffectsExpressionsLoopsCustom CommandsTypesTextVariables
+Please note that this is the old documentation on the last version of Skript I released.
+If you use a fork of Skript, please refer to that fork's documentation to find all new & updated information.
+Creating custom commands is not difficult with Skript, but remember that Skript is not suitable for creating aliases of other plugins' commands, only for creating completely new commands, as arguments are parsed differently than how most other plugins do it.
+
+The basic syntax of a custom command definition is a follows:
+command /commandname <arguments>: # arguments are explained below
+	description: A description of what this command does
+	usage: How to use the command, e.g. /commandname <arguments>  # If omitted this defaults to something similar to how the command was defined above.
+	permission: required.permission.to.use.this.command  # If omitted this command can be used by everyone regardless of permissions.
+	permission message: Message to send if the player doesn't have the required permission to use this command  # If omitted this defaults to "You don't have the required permission to use this command"
+	executable by: players/console/players and console  # If omitted this command can be executed by players and the console.
+	aliases: /c, /comname. # a list of aliases of the command which are usually abbreviations of the command
+	trigger:
+		put conditions and effects here that will be checked/executed when the command is used.
+A command's arguments look like <argtype> or <argtype = default value>, e.g. <item> or <item=water bucket>. The default value can also be an expression, in which case it has to be put into percent signs: <item=%tool%>.
+Arguments can also be mixed with text, e.g. a /give command definition can look like the following:
+command /give <items> to <player>:
+This command could then be used like /give a diamond to Njol.
+You can make parts of the arguments of a command optional by putting them into [square brackets], e.g. a command that finds mobs of a certain type within a given radius can look like command /find <entity type> [in radius <integer=100>]. This command can be used like /find creepers or /find zombies in radius 20, where the radius will default to 100 if omitted.
+
+In the likely case that this was confusing here's a simple example command:
+# a simple ID command to get the id of the held item
+command /id <item=%tool%>:
+	description: Find the ID of the item you're holding, or any given one.
+	usage: /id [type]
+	executable by: players
+	trigger:
+		message "The ID of %arg 1% is %id of arg 1%"
+
+Custom commands can be defined anywhere in a script file – the command basically replaces the event a trigger would normally need. If a command is related to some triggers I recommend to put the command into the same file as the triggers, otherwise put it into whatever file fits best. You could e.g. create a big file that contains all standalone commands, or create a separate file for every command.
+
+The following is an example of a combined trigger/command script which allows you to spawn a healer villager that can heal players for gold:
+command /healer:
+	permission: healer.create
+	description: spawns a healer villager which can heal players
+	trigger:
+		spawn a priest
+		set {healers::%spawned villager%} to true
+		set the name of the spawned villager to "Healer"
+ 
+on rightclick on a priest:
+	player has permission "healer.use"
+	player is holding a gold ingot
+	{healers::%clicked villager%} is true
+	player's health is below 10
+	heal the player by 5 hearts
+	remove 1 gold ingot from the player
+About
+~ njol.ch created by Peter Güttinger ~ icons by Yusuke Kamiyamane ~ 
+Last modified: Thor's Day, the 2nd of October 2014
