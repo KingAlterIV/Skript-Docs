@@ -1,0 +1,1446 @@
+Njol.ch
+»
+Projects
+»
+SkriptYggdrasilMarkup
+»
+DocumentationTutorialAPIStatistics
+»
+Skript: Expressions
+
+EventsConditionsEffectsExpressionsLoopsCustom CommandsTypesTextVariables
+Table of Contents
+Altitude
+Amount
+Amount of Items
+Argument
+Arithmetic
+Armour Slot
+Attacked
+Attacker
+Bed
+Biome
+Block
+Block Sphere
+Blocks
+Blocks in Region
+Chunk
+Clicked Block/Entity
+Colour of
+Coloured / Uncoloured
+Command
+Command Sender
+Compass Target
+Console
+Coordinate
+Creature/Entity/Player/Projectile/Villager/Powered Creeper/etc.
+Damage
+Damage Cause
+Data Value
+Difference
+Direction
+Distance
+Drops
+Element of
+Enchantment Level
+Ender Chest
+Entities
+Experience
+Facing
+Food Level
+Former/Future State
+Furnace Slot
+Game Mode
+Hash
+Head location
+Health
+Id
+Index Of
+Inventory
+IP
+Item
+Items
+Items In
+Join & Split
+Last Spawned/Shot Entity
+Length
+Level
+Level Progress
+Light Level
+Location
+Location At
+Location Of
+Loop value
+Lore
+Max Health
+Maximum Stack Size
+Me
+Message
+Money
+Name / Display Name
+Named Item
+Now
+Numbers
+Parse
+Parse Error
+Passenger
+Prefix/Suffix
+Random
+Random Number
+Region
+Region Members & Owners
+Regions At
+Remaining Air
+Rounding
+Script Name
+Shooter
+Sign Text
+Skull
+Spawn
+Speed
+Subtext
+Target
+Targeted Block
+Time
+Tool
+Type of
+UUID
+Vehicle
+Version
+Weather
+World
+Worlds
+X of Item
+Yaw / Pitch
+Filter for version: 
+ =>
+Expressions are syntax elements that represent a certain object, e.g. a player or a number, or multiple objects, e.g. the server's worlds or a list of blocks. Expressions can be used anywhere where Skript expects a value, e.g. in set {var} to <value> or teleport <entity expression> to <location expression>. The other possibility for values is to use a static value, e.g. ‘6’ or ‘a pickaxe and a shovel’.
+
+There are basically two kinds of expressions:
+simple expressions, which are usually one or a few words like ‘player’, ‘world’, or ‘last spawned entity’, and are usually event-dependent, i.e. their value will change depending on the event. The ‘player’ expression for example will hold the current event's player, which depends on which player triggered the event.
+property expressions, which get a value from another expression, e.g. data value of <item>, altitude of <location>, or <entity>'s world.
+There are a few exceptions though, e.g. distance between <location> and <location> or the direction expression.
+
+Expressions that represent multiple values can be looped to execute some code for each element of the expression with loop <expression>:. Please refer to the loops page for more information.
+Advanced
+
+Starting with Skript 2.0, expressions can be grouped with parentheses to denote their relation, e.g. set {var} to 10 emeralds and an apple or 5 stone is ambiguous while set {var} to 10 emeralds and (an apple or 5 stone) is not (this particular example will even result in a warning if no brackets are used).
+You should also use brackets when using lists of expressions inside other expressions, e.g. all players in "world" and "world_nether" should be written as all players in ("world" and "world_nether"), as otherwise it might be parsed as (all players in "world") and ("world_nether").
+Altitude
+
+patterns[?]:
+[the] altitude[s] of %locations%
+%locations%'[s] altitude[s]
+since:
+1.4.3
+Effectively an alias of 'y-coordinate of …', it represents the height of some object above bedrock.
+examples:
+on damage:
+	altitude of the attacker is higher that the altitude of the victim
+	set damage to damage * 1.25
+Amount
+
+patterns[?]:
+(amount|number|size) of %objects%
+since:
+1.0
+The amount of something.
+Please note that amount of <items> will not return the number of items, but the number of stacks, e.g. 1 for a stack of 64 torches.
+examples:
+message "There are %number of all players% players online!"
+Amount of Items
+
+patterns[?]:
+[the] (amount|number) of %item types% (in|of) %inventories%
+since:
+2.0
+Counts how many of a particular item type are in a given inventory.
+examples:
+message "You have %number of ores in the player's inventory% ores in your inventory."
+Argument
+
+patterns[?]:
+[the] last arg[ument][s]
+[the] arg[ument][s](-| )<(d+)>
+[the] <(d*1)st|(d*2)nd|(d*3)rd|(d*[4-90])th> arg[ument][s]
+[the] arg[ument][s]
+[the] %*type%( |-)arg[ument][( |-)<d+>]
+[the] arg[ument]( |-)%*type%[( |-)<d+>]
+since:
+1.0
+Only available in command events. Holds the value of the nth argument given to the command, e.g. if the command "/tell " is used like "/tell Njol Hello Njol!", argument 1 is the player named "Njol" and argument 2 is "Hello Njol!". 
+One can also use the type of the argument instead of its index to address the argument, e.g. in the above example 'player-argument' is the same as 'argument 1'.
+examples:
+give the item-argument to the player-argument
+damage the player-argument by the number-argument
+give a diamond pickaxe to the argument
+add argument 1 to argument 2
+heal the last argument
+Arithmetic
+
+patterns[?]:
+%number%[ ]+[ ]%number%
+%number%[ ]-[ ]%number%
+%number%[ ]*[ ]%number%
+%number%[ ]/[ ]%number%
+%number%[ ]^[ ]%number%
+since:
+1.4.2
+Arithmetic expressions, e.g. 1+2, (2 - health of player)/3, etc. 
+Available operands are addition (+), subtraction (-), multiplication (*), division (/), and exponentiation (^). Negation is not available yet, use 0 - expr instead.
+examples:
+set the player's health to 10 - the player's health
+loop (argument + 2)/5 times:
+	message "Two useless numbers: %loop-num*2 - 5%, %2^loop-num - 1%"
+message "You have %health of player * 2% half hearts of HP!"
+Armour Slot
+
+patterns[?]:
+[the] (boot[s]|shoe[s]|leg[ging][s]|chestplate[s]|helm[et][s]) [slot] of %living entities%
+%living entities%'[s] (boot[s]|shoe[s]|leg[ging][s]|chestplate[s]|helm[et][s]) [slot]
+since:
+1.0
+A part of a player's armour, i.e. the boots, leggings, chestplate or helmet. 
+As of Skript 2.1 this expression can be used for mobs as well, e.g. to equip zombies with armour.
+examples:
+set chestplate of the player to a diamond chestplate
+helmet of player is neither a helmet nor air # player is wearing a block, e.g. from another plugin
+Attacked
+
+patterns[?]:
+[the] (attacked|damaged|victim) [<(.+)>]
+since:
+1.3
+The victim of a damage event, e.g. when a player attacks a zombie this expression represents the zombie.
+examples:
+on damage:
+	victim is a creeper
+	damage the attacked creeper by 1 heart
+Attacker
+
+patterns[?]:
+[the] (attacker|damager)
+since:
+1.3
+The attacker of a damage event, e.g. when a player attacks a zombie this expression represents the player.
+Please note that the attacker can also be a block, e.g. a cactus or lava, but this expression will not be set in these cases.
+examples:
+on damage:
+	attacker is a player
+	health of attacker is less than or equal to 2
+	damage victim by 1 heart
+Bed
+
+patterns[?]:
+[the] bed[s] [location[s]] of %players%
+%players%'[s] bed[s] [location[s]]
+since:
+2.0
+The bed location of a player, i.e. the spawn point of a player if he ever slept in a bed and the bed still exists and is unobstructed.
+examples:
+bed of player exists:
+	teleport player the the player's bed
+else:
+	teleport the player to the world's spawn point
+Biome
+
+patterns[?]:
+[the] biome (of|%direction%) %location%
+%location%'[s] biome
+since:
+1.4.4
+The biome at a certain location. Please note that biomes are only defined for x/z-columns, i.e. the altitude (y-coordinate) doesn't matter.
+examples:
+# damage player in deserts constantly
+every real second:
+	loop all players:
+		biome at loop-player is desert
+		damage the loop-player by 1
+Block
+
+patterns[?]:
+[the] [event-]block
+[the] block %direction% [%location%]
+since:
+1.0
+The block involved in an event, e.g. the clicked block or the placed block. 
+Can optionally include a direction as well, e.g. 'block above' or 'block in front of the player'.
+examples:
+block is ore
+set block below to air
+spawn a creeper above the block
+loop blocks in radius 4:
+	loop-block is obsidian
+	set loop-block to water
+block is a chest:
+	clear the inventory of the block
+Block Sphere
+
+patterns[?]:
+[(all|the)] blocks in radius %number% [(of|around) %location%]
+[(all|the)] blocks around %location% in radius %number%
+since:
+1.0
+All blocks in a sphere around a center, mostly useful for looping.
+examples:
+loop blocks in radius 5 around the player:
+	set loop-block to air
+set all blocks in radius 5 around the player to air
+Blocks
+
+patterns[?]:
+[the] blocks %direction% [%locations%]
+[the] blocks from %location% [on] %direction%
+[the] blocks from %block% to %block%
+[the] blocks between %block% and %block%
+since:
+1.0
+Blocks relative to other blocks or between other blocks. Can be used to get blocks relative to other blocks or for looping.
+examples:
+loop blocks above the player:
+loop blocks between the block below the player and the targeted block:
+set the blocks below (the player, the victim and the targeted block) to air
+Blocks in Region
+
+patterns[?]:
+cannot be used directly
+since:
+2.1
+All blocks in a region.
+This expression requires a supported regions plugin to be installed.
+examples:
+loop all blocks in the region {arena.%{faction.%player%}%}:
+	clear the loop-block
+Chunk
+
+patterns[?]:
+[the] chunk[s] (of|%directions%) %locations%
+%locations%'[s] chunk[s]
+since:
+2.0
+The chunk a block, location or entity is in.
+examples:
+add the chunk at the player to {protected chunks::*}
+Clicked Block/Entity
+
+patterns[?]:
+[the] clicked (block|%*item type/entity type%)
+since:
+1.0
+Only available in click events: Represents the clicked block or entity.
+examples:
+message "You clicked on a %type of clicked entity%!"
+clicked block is a chest:
+	show the inventory of the clicked block to the player
+Colour of
+
+patterns[?]:
+[the] colo[u]r[s] of %item stacks/entities%
+%item stacks/entities%'[s] colo[u]r[s]
+since:
+1.2
+The colour of an item, can also be used to colour chat messages with "<%colour of ...%>this text is coloured!".
+examples:
+on click on wool:
+	message "This wool block is <%colour of block%>%colour of block%<reset>!"
+	set the colour of the block to black
+Coloured / Uncoloured
+
+patterns[?]:
+(colo[u]r-|colo[u]red )%texts%
+(un|non)[-](colo[u]r-|colo[u]red )%texts%
+since:
+2.0
+Parses <colour>s (including chat styles) in a message or removes any colours & chat styles from the message. 
+This expression replaces localised colours & chat styles, i.e. it doesn't replace english ones, which makes it appropriate to colour command arguments and chat messages.
+examples:
+on chat:
+	set message to coloured message
+command /fade <player>:
+	trigger:
+		set display name of the player-argument to uncoloured display name of the player-argument
+Command
+
+patterns[?]:
+[the] (full|complete|whole) command
+[the] command [label]
+[the] arguments
+since:
+2.0
+The command that caused an 'on command' event (excluding the leading slash and all arguments). 
+Use 'full command' for the command including arguments, or 'arguments' for the arguments only. 
+Please note that this event is not adequate for creating custom commands. See the article on custom commands to find out how to define new commands.
+examples:
+# prevent any commands except for the /exit command during some game
+on command:
+	{game.%player%.is playing} is true
+	command is not "exit"
+	message "You're not allowed to use commands during the game"
+	cancel the event
+Command Sender
+
+patterns[?]:
+[the] [command['s]] (sender|executor)
+since:
+2.0
+The player or the console who sent a command. Mostly useful in commands and command events.
+examples:
+make the command sender execute "/say hi!"
+on command:
+	log "%executor% used command /%command% %arguments%" to "commands.log"
+Compass Target
+
+patterns[?]:
+[the] compass target of %players%
+%players%'[s] compass target
+since:
+2.0
+The location a player's compass is pointing at. 
+Please note that wile you can set a player's compass target to an entity, it will actually be set to the location of the entity at the time when the effect is executed, and thus the compass won't automatically follow the entity.
+examples:
+# make all player's compasses target a player stored in {compass target.%player%}
+every 5 seconds:
+	loop all players:
+		set the loop-player's compass target to location of {compass target.%loop-player%}
+Console
+
+patterns[?]:
+[the] (console|server)
+since:
+1.3.1
+Represents the server's console which can receive messages and execute commands.
+examples:
+execute console command "/stop"
+send "message to console" to the console
+Coordinate
+
+patterns[?]:
+[the] (x|y|z)(-| )(coord[inate]|pos[ition]|loc[ation])[s] of %locations%
+%locations%'[s] (x|y|z)(-| )(coord[inate]|pos[ition]|loc[ation])[s]
+since:
+1.4.3
+Represents a given coordinate of a location.
+examples:
+player's y-coordinate is smaller than 40:
+	message "Watch out for lava!"
+Creature/Entity/Player/Projectile/Villager/Powered Creeper/etc.
+
+patterns[?]:
+[the] [event-]<.+>
+since:
+1.0
+The entity involved in an event (an entity is a player, a creature or an inanimate object like ignited TNT, a dropped item or an arrow).
+You can use the specific type of the entity that's involved in the event, e.g. in a 'death of a creeper' event you can use 'the creeper' instead of 'the entity'.
+examples:
+give a diamond sword of sharpness 3 to the player
+kill the creeper
+kill all powered creepers in the wolf's world
+projectile is an arrow
+Damage
+
+patterns[?]:
+[the] damage
+since:
+1.3.5
+How much damage is done in a damage event, possibly ignoring armour, criticals and/or enchantments. Can be changed (remember that in Skript '1' is one full heart, not half a heart).
+examples:
+increase the damage by 2
+Damage Cause
+
+patterns[?]:
+[the] damage (cause|type)
+since:
+2.0
+The damage cause of a damage event. Please click on the link for more information.
+examples:
+damage cause is lava, fire or burning
+Data Value
+
+patterns[?]:
+[the] ((data|damage)[s] [value[s]]|durabilit(y|ies)) of %item stacks/slots%
+%item stacks/slots%'[s] ((data|damage)[s] [value[s]]|durabilit(y|ies))
+since:
+1.2
+The data value of an item.
+You usually don't need this expression as you can check and set items with aliases easily, but this expression can e.g. be used to "add 1 to data of <item>", e.g. for cycling through all wool colours.
+examples:
+add 1 to the data value of the clicked block
+Difference
+
+patterns[?]:
+difference (between|of) %object% and %object%
+since:
+1.4
+The difference between two values, e.g. numbers, dates or times. 
+Use distance for locations.
+examples:
+difference between {command.%player%.lastuse} and now is smaller than a minute:
+  message "You have to wait a minute before using this command again!"
+  stop
+Direction
+
+patterns[?]:
+[%number% [(north[(east|west)][(south[(east|west)][(east|west)[(above|over|up|down)[ward(below|under[neath]|beneath) [%direction%]
+[%number% [[(direction|horizontal direction|facing|horizontal facing) of %entity/block% (of|from)]
+[%number% [[(direction|horizontal direction|facing|horizontal facing) (of|from)]
+[%number% [(in[ ]front [of]|forward[s]|behind|backwards|right|left) [of])
+[%number% [(in[ ]front [of]|forward[s]|behind|backwards|right|left) [of])
+since:
+1.0 (basic), 2.0 (extended)
+A helper expression for the direction type.
+examples:
+thrust the player upwards
+set the block behind the player to water
+loop blocks above the player:
+	set {_rand} to a random integer between 1 and 10
+	set the block {_rand} meters south east of the loop-block to stone
+block in horizontal facing of the clicked entity from the player is air
+spawn a creeper 1.5 meters horizontally behind the player
+spawn a TNT 5 meters above and 2 meters horizontally behind the player
+thrust the last spawned TNT in the horizontal direction of the player with speed 0.2
+push the player upwards and horizontally forward at speed 0.5
+push the clicked entity in in the direction of the player at speed -0.5
+open the inventory of the block 2 blocks below the player to the player
+teleport the clicked entity behind the player
+grow a regular tree 2 meters horizontally behind the player
+Distance
+
+patterns[?]:
+[the] distance between %location% and %location%
+since:
+1.0
+The distance between two points, measured in meters (i.e. blocks). 
+Like in other expressions, the location of a block is understood to be at its center, while the location of an entity is usually at its feet.
+examples:
+distance between the player and {%player%.home} is smaller than 20:
+	message "You're very close to your home!"
+Drops
+
+patterns[?]:
+[the] drops
+since:
+1.0
+Only available in death events: Represents the drops of the dying creature. 
+Drops can be prevented from dropping by removing them with "remove ... from drops", e.g. "remove all pickaxes from the drops", or "clear drops" if you don't want any drops at all.
+examples:
+clear drops
+remove 4 planks from the drops
+Element of
+
+patterns[?]:
+([the] first|[the] last|[a] random) element [out] of %objects%
+since:
+2.0
+The first, last or a random element of a set, e.g. a list variable.
+See also: random
+examples:
+give a random element out of {free items::*} to the player
+Enchantment Level
+
+patterns[?]:
+[the] (%enchantment% level|level of [[the] enchant[ment]] %enchantment%) o(f|n) %item types%
+%item types%'[s] (%enchantment% level|level of [[the] enchant[ment]] %enchantment%)
+since:
+2.0
+The level of a particular enchantment on an item
+examples:
+player' tool is a sword of sharpness:
+	message "You have a sword of sharpness %level of sharpness of the player's tool% equipped"
+Ender Chest
+
+patterns[?]:
+[the] ender[ ]chest[s] of %players%
+%players%'[s] ender[ ]chest[s]
+since:
+2.0
+The ender chest of a player. This can be used wherever an inventory can be used, in particular its items can be modified, and it can be shown to any player (not only the owning player).
+examples:
+open the player's ender chest to the player
+Entities
+
+patterns[?]:
+[all] %*entity types% [(in|of) [world[s]] %worlds%]
+[all] entities of type[s] %entity types% [(in|of) [world[s]] %worlds%]
+[all] %*entity types% (within|[with]in radius) %number% [(block[s]|met(er|re)[s])] (of|around) %location%
+[all] entities of type[s] %entity types% in radius %number% (of|around) %location%
+since:
+1.2.1
+All entities in all world, in a specific world or in a radius around a certain location, e.g. 'all players', 'all creepers in the player's world', or 'players in radius 100 of the player'.
+examples:
+kill all creepers in the player's world
+send "Psst!" to all players witin 100 meters of the player
+give a diamond to all ops
+heal all tamed wolves in radius 2000 around {town center}
+Experience
+
+patterns[?]:
+[the] [(spawned|dropped)] [e]xp[erience] [orb[s]]
+since:
+2.1
+How much experience was spawned in an experience spawn event. Can be changed.
+examples:
+on experience spawn:
+	add 5 to the spawned experience
+Facing
+
+patterns[?]:
+[the] [horizontal] facing of %living entities/blocks%
+%living entities/blocks%'[s] [horizontal] facing
+since:
+1.4
+The facing of an entity or block, i.e. exactly north, south, east, west, up or down (unlike direction which is the exact direction, e.g. '0.5 south and 0.7 east')
+examples:
+# makes a bridge
+loop blocks from the block below the player in the horizontal facing of the player:
+	set block to cobblestone
+Food Level
+
+patterns[?]:
+[the] (food|hunger)[[ ](level|met(er|re)|bar)] [of %player%]
+%player%'[s] (food|hunger)[[ ](level|met(er|re)|bar)]
+since:
+1.0
+The food level of a player from 0 to 10. Has several aliases: food/hunger level/meter/bar.
+examples:
+set the player's food level to 10
+Former/Future State
+
+patterns[?]:
+[the] (former|past|old) [state] [of] %~object%
+%~object% before [the event]
+[the] (future|to-be|new) [state] [of] %~object%
+%~object%(-to-be| after[(wards| the event)])
+since:
+1.1
+Represents the value of an expression before an event happened or the value it will have directly after the event, e.g. the old or new level respectively in a level change event.
+Note: The past, future and present states of an expression are sometimes called 'time states' of an expression.
+Note 2: If you don't specify whether to use the past or future state of an expression that has different values, its default value will be used which is usually the value after the event.
+examples:
+on teleport:
+	former world was "world_nether" # or 'world was'
+	world will be "world" # or 'world after the event is'
+on tool change:
+	past tool is an axe
+	the tool after the event will be air
+on weather change:
+	set {weather.%world%.old} to past weather
+	set {weather.%world%.current} to the new weather
+Furnace Slot
+
+patterns[?]:
+[the] (ore|fuel|result)[s] [slot[s]] of %blocks%
+%blocks%'[s] (ore|fuel|result)[s] [slot[s]]
+since:
+1.0
+A slot of a furnace, i.e. either the ore, fuel or result slot.
+Remember to use 'block' and not 'furnace', as 'furnace' is not an existing expression.
+examples:
+set the fuel slot of the clicked block to a lava bucket
+set the block's ore slot to 64 iron ore
+give the result of the block to the player
+clear the result slot of the block
+Game Mode
+
+patterns[?]:
+[the] game[ ]mode of %players%
+%players%'[s] game[ ]mode
+since:
+1.0
+The game mode of a player, which can be either survival, creative, or adventure.
+examples:
+player's gamemode is survival
+set the player's gamemode to creative
+Hash
+
+patterns[?]:
+[md5][( |-)hash(ed|[( |-)]code] of) %texts%
+since:
+2.0
+Hashes the given text using the MD5 algorithm. This is useful for storing passwords or IP addresses without having to store them literally. 
+Please note that an MD5 hash is irreversible, i.e. you won't be able to get the original text back (which is the point of storing passwords like this). Brute force and rainbow table attacks can still be performed on hashes though which can easily crack short or insecure passwords.
+examples:
+command /setpass <text>:
+	trigger:
+		set {password.%player%} to hashed text-argument
+command /login <text>:
+	trigger:
+		{password.%player%} is hashed text-argument:
+			message "login successful."
+		else:
+			message "wrong password!"
+Head location
+
+patterns[?]:
+[the] (head|eye[s]) [location[s]] of %living entities%
+%living entities%'[s] (head|eye[s]) [location[s]]
+since:
+2.0
+The location of an entity's head, mostly useful for players and e.g. looping blocks in the player's line of sight.
+Please note that this location is only accurate for entities whose head is exactly above their center, i.e. players, endermen, zombies, skeletons, etc., but not sheep, pigs or cows.
+examples:
+set the block at the player's head to air
+set the block in front of the player's eyes to glass
+loop blocks in front of the player's head:
+Health
+
+patterns[?]:
+[the] health of %living entities%
+%living entities%'[s] health
+since:
+1.0
+The health of a creature, e.g. a player, mob, villager, etc. from 0 to the creature's max health, e.g. 10 for players.
+examples:
+message "You have %health% HP left."
+Id
+
+patterns[?]:
+[the] id[s] of %item type%
+%item type%'[s] id[s]
+since:
+1.0
+The id of a specific item. You usually don't need this expression as you can likely do everything with aliases.
+examples:
+message "the ID of %type of the clicked block% is %id of the clicked block%."
+Index Of
+
+patterns[?]:
+[the] [(first|last)] index of %text% in %text%
+since:
+2.1
+The first of last index of a character (or text) in a text, or -1 if it doesn't occur in the text. Indices range from 1 to the length of the text.
+examples:
+set {_@} to the first index of "@" in the text argument
+if {_s} contains "abc":
+	set {_s} to the first (index of "abc" in {_s} + 3) characters of {_s} # removes everything after the first "abc" from {_s}
+Inventory
+
+patterns[?]:
+[the] inventor(y|ies) of %inventoryholders%
+%inventoryholders%'[s] inventor(y|ies)
+since:
+1.0
+The inventory of a block or player. You can usually omit this expression and can directly add or remove items to/from blocks or players.
+examples:
+add a plank to the player's inventory
+clear the player's inventory
+remove 5 wool from the inventory of the clicked block
+IP
+
+patterns[?]:
+IP[s][( |-)address[es]] of %players%
+%players%'[s] IP[s][( |-)address[es]]
+since:
+1.4
+The IP address of a player.
+examples:
+IP-ban the player # is equal to the next line
+ban the IP-address of the player
+broadcast "Banned the IP %IP of player%"
+Item
+
+patterns[?]:
+[the] item
+since:
+unknown
+The item involved in an event, e.g. in a drop, dispense, pickup or craft event.
+examples:
+on dispense:
+	item is a clock
+	set the time to 6:00
+Items
+
+patterns[?]:
+[(all|every)] item(s|[ ]types)
+items of type[s] %item types%
+[(all|every)] block(s|[ ]types)
+blocks of type[s] %item types%
+since:
+unknown
+Items or blocks of a specific type, useful for looping.
+examples:
+loop items of type ore and log:
+	block contains loop-item
+	message "There's at least one %loop-item% in this block"
+	stop loop
+drop all blocks at the player # drops one of every block at the player
+Items In
+
+patterns[?]:
+[all] items (inventor(y|ies)) %inventories%
+since:
+2.0
+All items in an inventory. Useful for looping or storing in a list variable. 
+Please note that the positions of the items in the inventory are not saved, only their order is preserved.
+examples:
+loop all items in the player's inventory:
+	loop-item is enchanted
+	remove loop-item from the player
+set {inventory.%player%::*} to items in the player's inventory
+Join & Split
+
+patterns[?]:
+(concat[enate]|join) %texts% [(with|using|by) [[the] delimiter] %text%]
+split %text% (at|using|by) [[the] delimiter] %text%
+%text% [split] (at|using|by) [[the] delimiter] %text%
+since:
+2.1
+Joins several texts with a common delimiter (e.g. ", "), or splits a text into multiple texts at a given delimiter.
+examples:
+message "Online players: %join all players with " | "%" # %all players% would use the default "x, y, and z"
+set {_s::} to the string argument split at ","
+Last Spawned/Shot Entity
+
+patterns[?]:
+[the] [last[ly]] (spawned|shot) %*entity type%
+since:
+1.3 (spawned entity), 2.0 (shot entity)
+Holds the entity that was spawned most recently with the spawn effect, or shot with the shoot effect. Please note that even though you can spawn multiple mobs simultaneously (e.g. with 'spawn 5 creepers'), only the last spawned mob is saved and can be used. If you spawn an entity and shoot a projectile you can however access both.
+examples:
+spawn a priest
+set {%spawned priest%.healer} to true
+shoot an arrow from the last spawned entity
+ignite the shot projectile
+Length
+
+patterns[?]:
+[the] length of %texts%
+%texts%'[s] length
+since:
+2.1
+The length of a text, in number of characters.
+examples:
+set {_l} to length of the string argument
+Level
+
+patterns[?]:
+[the] level of %players%
+%players%'[s] level
+since:
+unknown
+The level of a player.
+examples:
+reduce the victim's level by 1
+set the player's level to 0
+Level Progress
+
+patterns[?]:
+[the] level progress of %players%
+%players%'[s] level progress
+since:
+2.0
+The progress a player has made until the next level. Remember that this value is between 0 and 1, not 0 and 100!
+Changing this value can cause a player's level to change if the resulting level progess is negative or larger than 1, e.g.increase the player's level progress by 0.5 will make the player gain a level if his progress was more than 50%.
+examples:
+# use the exp bar as mana
+on rightclick with a blaze rod:
+	player's level progress is larger than 0.2
+	shoot a fireball from the player
+	reduce the player's level progress by 0.2
+every 2 seconds:
+	loop all players:
+		level progress of loop-player is smaller than 0.9:
+			increase level progress of the loop-player by 0.1
+		else:
+			set level progress of the loop-player to 0.99
+on xp spawn:
+	cancel event
+Light Level
+
+patterns[?]:
+[(sky|sun|block)[ ]]light[ ]level [(of|%direction%) %location%]
+since:
+1.3.4
+Gets the light level at a certain location which ranges from 0 to 15.
+It can be separated into sunlight (15 = direct sunlight, 1-14 = indirect) and block light (torches, glowstone, etc.). The total light level of a block is the maximum of the two different light types.
+examples:
+# set vampire players standing in bright sunlight on fire
+every 5 seconds:
+	loop all players:
+		{vampire.%loop-player%} is true
+		sunlight level at the loop-player is greater than 10
+		ignite the loop-player for 5 seconds
+Location
+
+patterns[?]:
+[the] [event-](location|position)
+[the] (location|position) %direction% [%location%]
+since:
+2.0
+The location where an event happened (e.g. at an entity or block), or a location relative to another (e.g. 1 meter above another location).
+examples:
+drop 5 apples at the event-location # exactly the same as writing 'drop 5 apples'
+set {_loc} to the location 1 meter above the player
+Location At
+
+patterns[?]:
+[the] (location|position) [at] [(][x[ ][=[ ]]]%number%, [y[ ][=[ ]]]%number%, [and] [z[ ][=[ ]]]%number%[)] [[(in|of) [[the] world]] %world%]
+since:
+2.0
+Allows to create a location from three coordinates and a world. 
+This expression is currently not parsed correctly, and there is no ETA on a fix yet.
+examples:
+set {_loc} to the location at arg-1, arg-2, arg-3 of the world arg-4
+distance between the player and the location (0, 0, 0) is less than 200
+Location Of
+
+patterns[?]:
+(location|position) of %location%
+%location%'[s] (location|position)
+since:
+unknown
+The location of a block or entity. This not only represents the x, y and z coordinates of the location but also includes the world and the direction an entity is looking (e.g. teleporting to a saved location will make the teleported entity face the same saved direction every time). 
+Please note that the location of an entity is at its feet, use the head location to get the location of the head.
+examples:
+set {home.%player%} to the location of the player
+message "Your home was set to %player's location% in %player's world%."
+Loop value
+
+patterns[?]:
+[the] loop-<.+>
+since:
+1.0
+The currently looped value.
+examples:
+# countdown:
+loop 10 times:
+	message "%11 - loop-number%"
+	wait a second
+# generate a 10x10 floor made of randomly coloured wool below the player:
+loop blocks from the block below the player to the block 10 east of the block below the player:
+	loop blocks from the loop-block to the block 10 north of the loop-block:
+		set loop-block-2 to any wool
+Lore
+
+patterns[?]:
+[the] line %number% of [the] lore of [%item stack/item type%]
+[the] line %number% of %item stack/item type%'[s] lore
+[the] %number%(st|nd|rd|th) line of [the] lore of [%item stack/item type%]
+[the] %number%(st|nd|rd|th) line of %item stack/item type%'[s] lore
+since:
+2.1
+An item's lore.
+examples:
+set the 1st line of the item's lore to "<orange>Excalibur 2.0"
+Max Health
+
+patterns[?]:
+[the] max[imum] health of %living entities%
+%living entities%'[s] max[imum] health
+since:
+2.0
+The maximum health of an entity, e.g. 10 for a player
+examples:
+on join:
+	set the maximum health of the player to 100
+spawn a giant
+set the last spawned entity's max health to 1000
+Maximum Stack Size
+
+patterns[?]:
+[the] max[imum] stack[[ ]size] of %item stack%
+%item stack%'[s] max[imum] stack[[ ]size]
+since:
+2.1
+The maximum stack size of the specified material, e.g. 64 for torches, 16 for buckets, and 1 for swords.
+examples:
+send "You can only pick up %max stack size of player's tool% of %type of (player's tool)%" to player
+Me
+
+patterns[?]:
+me
+my[self]
+since:
+2.1.1
+A 'me' expression that can be used in effect commands only.
+examples:
+!heal me
+!kick myself
+!give a diamond axe to me
+Message
+
+patterns[?]:
+[the] [chat( |-)]message
+[the] (join|log[ ]in)( |-)message
+[the] (quit|leave|log[ ]out|kick)( |-)message
+[the] death( |-)message
+since:
+1.4.6 (chat message), 1.4.9 (join & quit messages), 2.0 (death message)
+The (chat) message of a chat event, the join message of a join event, the quit message of a quit event, or the death message on a death event. This expression is mostly useful for being changed.
+examples:
+on chat:
+	player has permission "admin"
+	set message to "<red>%message%"
+
+on first join:
+	set join message to "Welcome %player% to our awesome server!"
+on join:
+	player has played before
+	set join message to "Welcome back, %player%!"
+
+on quit:
+	set quit message to "%player% left this awesome server!"
+
+on death:
+	set the death message to "%player% died!"
+Money
+
+patterns[?]:
+cannot be used directly
+since:
+2.0
+How much virtual money a player has (can be changed). 
+
+Like all economy elements, this expression requires that Vault and a compatible economy plugin is installed.
+examples:
+message "You have %player's money%" # the currency name will be added automatically
+remove 20$ from the player's balance # replace '$' by whatever currency you use
+add 200 to the player's account # or omit the currency alltogether
+Name / Display Name
+
+patterns[?]:
+[the] (player|tab)[ ]list name[s] of %players%
+%players%'[s] (player|tab)[ ]list name[s]
+[the] (display|nick|chat)[ ]name[s] of %slots/item stacks/living entities/players%
+%slots/item stacks/living entities/players%'[s] (display|nick|chat)[ ]name[s]
+[the] name[s] of %slots/item stacks/living entities/players%
+%slots/item stacks/living entities/players%'[s] name[s]
+since:
+1.4.6 (players' name & display name), unknown (player list name), 2.0 (item name)
+Represents a player's minecraft account name, chat display name, or playerlist name, or the custom name of an item or a living entity. 
+
+The differences between the different names are: 
+name: Minecraft account name of a player (unmodifiable), or the custom name of an item or mob (modifiable).
+display name: The name of a player as displayed in the chat. This name can be changed freely and can include colour codes, and is shared among all plugins (e.g. chat plugins will use a changed name).
+tab list name: The name of a player used in the player list that usually opens with the tab key. Please note that this is limited to 16 characters, including colour codes which are counted as 2 characters each, and that no two players can have the same tab list name at the same time.
+Starting with Skript 2.1, the name and display name of entities have a different meaning: 'Name' sets the entity's name like a name tag does, while 'display name' will not only set the entity's name, but will also make it visible through blocks just like players' names.
+examples:
+on join:
+	player has permission "name.red"
+	set the player's display name to "<red>[admin]<gold>%name of player%"
+	set the player's tablist name to "<green>%name of player%"
+set the name of the player's tool to "Legendary Sword of Awesomeness"
+Named Item
+
+patterns[?]:
+%item types% (named|with name[s]) %text%
+since:
+2.0
+Directly names an item, useful for defining a named item in a script. If you want to (re)name existing items you can either use this expression or use set name of <item> to <text>.
+examples:
+give a diamond sword of sharpness 100 named "<gold>Excalibur" to the player
+set tool of player to the player's tool named "<gold>Wand"
+set the name of the player's tool to "<gold>Wand"
+Now
+
+patterns[?]:
+now
+since:
+1.4
+The current system time of the server. Use time to get the Minecraft time of a world.
+examples:
+broadcast "Current server time: %now%"
+Numbers
+
+patterns[?]:
+[(integers) (between|from) %number% (and|to) %number%
+%number% times
+since:
+1.4.6
+All numbers between two given numbers, useful for looping.
+Use 'numbers' if your start is not an integer and you want to keep the fractional part of the start number constant, or use 'integers' if you only want to loop integers.
+An integer loop from 1 to a number x can also be written as 'loop x times'.
+examples:
+loop 5 times: # loops 1, 2, 3, 4, 5
+loop numbers from 2.5 to 5.5: # loops 2.5, 3.5, 4.5, 5.5
+loop integers from 2.9 to 5.1: # same as '3 to 5', i.e. loops 3, 4, 5
+Parse
+
+patterns[?]:
+%text% parsed as (%*type%|"<.*>")
+since:
+2.0
+Parses text as a given type, or as a given pattern. 
+This expression can be used in two different ways: One which parses the entire text as a single instance of a type, e.g. as a number, and one that parses the text according to a pattern. 
+If the given text could not be parsed, this expression will return nothing and the parse error will be set if some information is available. 
+Some notes about parsing with a pattern: 
+- The pattern must be a Skript pattern, e.g. percent signs are used to define where to parse which types, e.g. put a %number% or %items% in the pattern if you expect a number or some items there. 
+- You have to save the expression's value in a list variable, e.g. set {parsed::*} to message parsed as "...". 
+- The list variable will contain the parsed values from all %types% in the pattern in order. If a type was plural, e.g. %items%, the variable's value at the respective index will be a list variable, e.g. the values will be stored in {parsed::1::*}, not {parsed::1}.
+examples:
+set {var} to line 1 parsed as number
+on chat:
+	set {var::*} to message parsed as "buying %items% for %money%"
+	if parse error is set:
+		message "%parse error%"
+	else if {var::*} is set:
+		cancel event
+		remove {var::2} from the player's balance
+		give {var::1::*} to the player
+Parse Error
+
+patterns[?]:
+[the] [last] [parse] error
+since:
+2.0
+The error which caused the last parse operation to fail, which might not be set if a pattern was used and the pattern didn't match the provided text at all.
+examples:
+set {var} to line 1 parsed as integer
+if {var} is not set:
+	parse error is set:
+		message "<red>Line 1 is invalid: %last parse error%"
+	else:
+		message "<red>Please put an integer on line 1!"
+Passenger
+
+patterns[?]:
+[the] passenger[s] of %entities%
+%entities%'[s] passenger[s]
+since:
+2.0
+The passenger of a vehicle, or the rider of a mob. 
+
+See also: vehicle (expression), vehicle (effect)
+examples:
+passenger of the minecart is a creeper or a cow
+the saddled pig's passenger is a player
+Prefix/Suffix
+
+patterns[?]:
+cannot be used directly
+since:
+2.0
+The prefix or suffix as defined in the server's chat plugin.
+examples:
+on chat:
+	cancel event
+	broadcast "%player's prefix%%player's display name%%player's suffix%: %message%" to the player's world
+set the player's prefix to "[<red>Admin<reset>] "
+Random
+
+patterns[?]:
+[a] random %*type% [out] of %objects%
+since:
+1.4.9
+Gets a random item out of a set, e.g. a random player out of all players online.
+examples:
+give a diamond to a random player out of all players
+give a random item out of all items to the player
+Random Number
+
+patterns[?]:
+[a] random (integer|number) (from|between) %number% (to|and) %number%
+since:
+1.4
+A random number or integer between two given numbers. Use 'number' if you want any number with decimal parts, or use use 'integer' if you only want whole numbers.
+Please note that the order of the numbers doesn't matter, i.e. random number between 2 and 1 will work as well as random number between 1 and 2.
+examples:
+set the player's health to a random number between 5 and 10
+send "You rolled a %random integer from 1 to 6%!" to the player
+Region
+
+patterns[?]:
+cannot be used directly
+since:
+2.1
+The region involved in an event.
+This expression requires a supported regions plugin to be installed.
+examples:
+on region enter:
+	region is {forbidden region}
+	cancel the event
+Region Members & Owners
+
+patterns[?]:
+cannot be used directly
+since:
+2.1
+A list of members or owners of a region.
+This expression requires a supported regions plugin to be installed.
+examples:
+on entering of a region:
+	message "You're entering %region% whose owners are %owners of region%".
+Regions At
+
+patterns[?]:
+cannot be used directly
+since:
+2.1
+All regions at a particular location.
+This expression requires a supported regions plugin to be installed.
+examples:
+On click on a sign:
+	line 1 of the clicked block is "[region info]"
+	set {_regions::*} to regions at the clicked block
+	if {_regions::*} is empty:
+		message "No regions exist at this sign."
+	else:
+		message "Regions containing this sign: <gold>%{_regions::*}%<r>."
+Remaining Air
+
+patterns[?]:
+[the] remaining air of %living entities%
+%living entities%'[s] remaining air
+since:
+unknown
+How much time a player has left underwater before starting to drown.
+examples:
+player's remaining air is less than 3 seconds:
+	send "hurry, get to the surface!" to the player
+Rounding
+
+patterns[?]:
+floor(%number%)
+[(a|the)] round[ed] down %number%
+round(%number%)
+[(a|the)] round[ed] %number%
+ceil[ing](%number%)
+[(a|the)] round[ed] up %number%
+since:
+2.0
+Rounds numbers normally, up (ceiling) or down (floor) respectively.
+examples:
+set {var} to rounded health of player
+set line 1 of the block to round(1.5 * player's level)
+set {_x} to floor({_y}) - ceil({_x})
+add rounded down argument to the player's health
+Script Name
+
+patterns[?]:
+[the] script[['s] name]
+since:
+2.0
+Holds the current script's name (the file name without '.sk').
+examples:
+on script load:
+	set {running.%script%} to true
+on script unload:
+	set {running.%script%} to false
+Shooter
+
+patterns[?]:
+[the] shooter [of %projectile%]
+since:
+1.3.7
+The shooter of a projectile. 
+As of Skript 2.1, this can be changed to fake the shooter of the projectile.
+examples:
+shooter is a skeleton
+add 1 to {game.points.%shooter of {game.ball}%}
+Sign Text
+
+patterns[?]:
+[the] line %number% [of %block%]
+[the] (1st|first|2nd|second|3rd|third|4th|fourth) line [of %block%]
+since:
+1.3
+A line of text on a sign. Can be changed, but remember that there is a 16 character limit per line (including colour codes that use 2 characters each).
+examples:
+on rightclick on sign:
+	line 2 of the clicked block is "[Heal]":
+		heal the player
+	set line 3 to "%player%"
+Skull
+
+patterns[?]:
+[the] skull of %offline players/entities/entity types%
+%offline players/entities/entity types%'[s] skull
+since:
+2.0
+Gets a skull item representing a player or an entity.
+examples:
+give the victim's skull to the attacker
+set the block at the entity to the entity's skull
+Spawn
+
+patterns[?]:
+[the] spawn[s] [(point|location)[s]] [of %worlds%]
+%worlds%'[s] spawn[s] [(point|location)[s]]
+since:
+1.4.2
+The spawnpoint of a world.
+examples:
+teleport all players to spawn
+set the spawn point of "world" to the player's location
+Speed
+
+patterns[?]:
+[the] (walk[ing]|fl(y[ing]|ight))[( |-])speed of %players%
+%players%'[s] (walk[ing]|fl(y[ing]|ight))[( |-])speed
+since:
+unknown
+A player's walking or flying speed. Both can be changed, but values must be between -1 and 1 (excessive values will be changed to -1 or 1 respectively). Negative values reverse directions. 
+Please note that changing a player's speed will change his FOV just like potions do. 
+The default values are 0.2 for walk speed, and 0.1 for fly speed.
+examples:
+set the player's walk speed to 1
+increase the argument's fly speed by 0.1
+set the walk speed of the player to 0-(the player's walk speed) # reverses the player's speed
+Subtext
+
+patterns[?]:
+[the] [(part|sub[ ](text|string)) of %texts% (between|from) (ind(ex|ices)|character[s])] %number% [(and|to) (index|character)] %number%
+[the] (first|last) [%number%] character[s] of %texts%
+[the] %number% (first|last) characters of %texts%
+since:
+2.1
+Extracts part of a text. You can either get the first <x> characters, the last <x> characters, or the characters between indices <x> and <y>. The indices <x> and <y> should be between 1 and the length of the text (other values will be fit into this range).
+examples:
+set {_s} to the first 5 characters of the text argument
+message "%subtext of {_s} from characters 2 to (the length of {_s} - 1)%" # removes the first and last character from {_s} and sends it to the player or console
+Target
+
+patterns[?]:
+[the] target[[ed] %*entity type%] [of %living entities%]
+%living entities%'[s] target[[ed] %*entity type%]
+since:
+unknown
+For players this is the entity at the crosshair, while for mobs and experience orbs it represents the entity they are attacking/following (if any).
+examples:
+on entity target:
+    entity's target is a player
+    send "You're being followed by an %entity%!" to target of entity
+Targeted Block
+
+patterns[?]:
+[the] target[ed] block[s] [of %players%]
+%players%'[s] target[ed] block[s]
+[the] actual[ly] target[ed] block[s] [of %players%]
+%players%'[s] actual[ly] target[ed] block[s]
+since:
+1.0
+The block at the crosshair. This regards all blocks that are not air as fully opaque, e.g. torches will be like a solid stone block for this expression.
+examples:
+# A command to set the block a player looks at to a specific type:
+command /setblock <material>:
+    trigger:
+        set targeted block to argument
+Time
+
+patterns[?]:
+[the] time [(in|of) %worlds%]
+%worlds%'[s] time
+since:
+1.0
+The time of a world.
+examples:
+time in world is between 18:00 and 6:00:
+	broadcast "It's night-time, watch out for monsters!"
+Tool
+
+patterns[?]:
+[the] (tool|held item|weapon) [of %living entities%]
+%living entities%'[s] (tool|held item|weapon)
+since:
+1.0
+The item a player is holding. 
+As of Skript 2.1 this expression can also be used for mobs, e.g. to change the weapon of a zombie.
+examples:
+player is holding a pickaxe
+# is the same as
+player's tool is a pickaxe
+Type of
+
+patterns[?]:
+[the] type of %entity types/item stacks%
+%entity types/item stacks%'[s] type
+since:
+1.4
+The type of a block, item, or entity. The type of an item is only its id and data value, i.e. it ignores the amount, enchantments etc., and the type of an entity is e.g. 'wolf' or 'player'.
+examples:
+on rightclick on an entity:
+	message "This is a %type of clicked entity%!"
+UUID
+
+patterns[?]:
+[the] UUID of %players/worlds%
+%players/worlds%'[s] UUID
+since:
+2.1.2
+The UUID of a player or world.
+In the future there will be an option to use a player's UUID instead of the name in variable names (i.e. when %player% is used), but for now this can be used.
+Please note that this expression does not work for offline players!
+examples:
+# prevents people from joining the server if they use the name of a player
+# who has played on this server at least once since this script has been added
+on login:
+	{uuids.%name of player%} exists:
+		{uuids.%name of player%} is not UUID of player
+		kick player due to "Someone with your name has played on this server before"
+	else:
+		set {uuids.%name of player%} to UUID of player
+Vehicle
+
+patterns[?]:
+[the] vehicle[s] of %entities%
+%entities%'[s] vehicle[s]
+since:
+2.0
+The vehicle an entity is in, if any. This can actually be any entity, e.g. spider jockeys are skeletons that ride on a spider, so the spider is the 'vehicle' of the skeleton.
+See also: passenger
+examples:
+vehicle of the player is a minecart
+Version
+
+patterns[?]:
+([craft]bukkit|minecraft|skript)( |-)version
+since:
+2.0
+The version of Bukkit, Minecraft or Skript respectively.
+examples:
+message "This server is running Minecraft %minecraft version% on Bukkit %bukkit version%"
+message "This server is powered by Skript %skript version%"
+Weather
+
+patterns[?]:
+[the] weather [(in|of) %worlds%]
+%worlds%'[s] weather
+since:
+1.0
+The weather in the given or the current world.
+examples:
+set weather to clear
+weather in "world" is rainy
+World
+
+patterns[?]:
+[the] world [of %entity/location%]
+%entity/location%'[s] world
+since:
+1.0
+The world the event occurred in.
+examples:
+world is "world_nether"
+teleport the player to the world's spawn
+set the weather in the player's world to rain
+Worlds
+
+patterns[?]:
+[(the|all)] worlds
+since:
+1.0
+All worlds of the server, useful for looping.
+examples:
+loop all worlds:
+	broadcast "You're in %loop-world%" to loop-world
+X of Item
+
+patterns[?]:
+%number% of %item stacks/entity type%
+since:
+1.2
+An expression to be able to use a certain amount of items where the amount can be any expression. Please note that is expression is not stable and might be replaced in the future.
+examples:
+give level of player of pickaxes to the player
+Yaw / Pitch
+
+patterns[?]:
+[the] (yaw|pitch) of %locations%
+%locations%'[s] (yaw|pitch)
+since:
+2.0
+The yaw or pitch of a location, in degrees.
+examples:
+log "%player%: %location of player%, %player's yaw%, %player's pitch%" to "playerlocs.log"
+About
+~ njol.ch created by Peter Güttinger ~ icons by Yusuke Kamiyamane ~ 
+Last modified: Freyja's Day, 9th August 2013, 09:43
