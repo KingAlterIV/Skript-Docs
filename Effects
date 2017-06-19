@@ -1,0 +1,489 @@
+Njol.ch
+»
+Projects
+»
+SkriptYggdrasilMarkup
+»
+DocumentationTutorialAPIStatistics
+»
+Skript: Effects
+
+EventsConditionsEffectsExpressionsLoopsCustom CommandsTypesTextVariables
+Table of Contents
+Ban
+Broadcast
+Cancel Event
+Change: Set/Add/Remove/Delete/Reset
+Colour Armour
+Command
+Damage/Heal/Repair
+Delay
+Drop
+Enchant/Disenchant
+Equip
+Exit
+Explosion
+Ignite/Extinguish
+Kick
+Kill
+Lightning
+Log
+Message
+op/deop
+Open Inventory
+Play Effect
+Poison/Cure
+Potion Effects
+Push
+PvP
+Replace
+Shear
+Shoot
+Spawn
+Teleport
+Toggle
+Tree
+Vehicle
+Filter for version: 
+ =>
+Ban
+
+patterns[?]:
+ban %texts/offline players% [(by reason of|because [of]|on account of|due to) %text%]
+unban %texts/offline players%
+ban %players% by IP [(by reason of|because [of]|on account of|due to) %text%]
+unban %players% by IP
+IP(-| )ban %players% [(by reason of|because [of]|on account of|due to) %text%]
+(IP(-| )unban|un[-]IP[-]ban) %players%
+since:
+1.4, 2.1.1 (ban reason)
+Bans/unbans a player or IP. 
+Starting with Skript 2.1.1 and Bukkit 1.7.2 R0.4, one can also ban players with a reason. If an invalid reason is supplied (e.g. a non-existent variable) the player will still be banned, but the default reason will be used.
+examples:
+unban player
+ban "127.0.0.1"
+IP-ban the player because "he is an idiot"
+Broadcast
+
+patterns[?]:
+broadcast %texts% [(to|in) %worlds%]
+since:
+1.0
+Broadcasts a message to the server.
+examples:
+broadcast "Welcome %player% to the server!"
+broadcast "Woah! It's a message!"
+Cancel Event
+
+patterns[?]:
+cancel [the] event
+uncancel [the] event
+since:
+1.0
+Cancels the event (e.g. prevent blocks from being placed, or damage being taken).
+examples:
+on damage:
+	victim is a player
+	victim has the permission "skript.god"
+	cancel the event
+Change: Set/Add/Remove/Delete/Reset
+
+patterns[?]:
+(add|give) %objects% to %~objects%
+increase %~objects% by %objects%
+give %~objects% %objects%
+set %~objects% to %objects%
+remove (all|every) %objects% from %~objects%
+(remove|subtract) %objects% from %~objects%
+reduce %~objects% by %objects%
+(delete|clear) %~objects%
+reset %~objects%
+since:
+1.0 (set, add, remove, delete), 2.0 (remove all)
+A very general effect that can change many expressions. Many expressions can only be set and/or deleted, while some can have things added to or removed from them.
+examples:
+# set:
+Set the player's display name to "<red>%name of player%"
+set the block above the victim to lava
+# add:
+add 2 to the player's health # preferably use '<a href='#heal'>heal</a>' for this
+add argument to {blacklist::*}
+give a diamond pickaxe of efficiency 5 to the player
+increase the data value of the clicked block by 1
+# remove:
+remove 2 pickaxes from the victim
+subtract 2.5 from {points.%player%}
+# remove all:
+remove every iron tool from the player
+remove all minecarts from {entitylist::*}
+# delete:
+delete the block below the player
+clear drops
+delete {variable}
+# reset:
+reset walk speed of player
+reset chunk at the targeted block
+Colour Armour
+
+patterns[?]:
+(dye|colo[u]r|paint) %slots/item stack% %color%
+(dye|colo[u]r|paint) %slots/item stack% (%number%, %number%, %number%)
+since:
+2.0
+Colours leather armour in a given colour. You can also use RGB codes if you feel limited with the 16 default colours. RGB codes are three numbers from 0 to 255 in the order (red, green, blue), where (0,0,0) is black and (255,255,255) is white.
+examples:
+dye player's helmet blue
+colour the player's tool red
+Command
+
+patterns[?]:
+[execute] [the] command %texts% [by %players/console%]
+[execute] [the] %players/console% command %texts%
+(let|make) %players/console% execute [[the] command] %texts%
+since:
+1.0
+Executes a command. This can be useful to use other plugins in triggers.
+examples:
+make player execute command "/suicide"
+execute console command "/say Hello everyone!"
+Damage/Heal/Repair
+
+patterns[?]:
+damage %slots/living entities/item stack% by %number% [heart[s]]
+heal %living entities% [by %number% [heart[s]]]
+repair %slots/item stack% [by %number%]
+since:
+1.0
+Damage/Heal/Repair an entity, or item stack.
+examples:
+damage player by 5 hearts
+heal the player
+repair tool of player
+Delay
+
+patterns[?]:
+(wait|halt) [for] %time span%
+since:
+1.4
+Delays the script's execution by a given timespan. Please note that delays are not persistent, e.g. trying to create a tempban script with ban player → wait 7 days → unban player will not work if you restart your server anytime within these 7 days. You also have to be careful even when using small delays!
+examples:
+wait 2 minutes
+halt for 5 minecraft hours
+wait a tick
+Drop
+
+patterns[?]:
+drop %item types/experience point% [%directions% %locations%]
+since:
+1.0
+Drops one or more items.
+examples:
+on death of creeper:
+	drop 1 TNT
+Enchant/Disenchant
+
+patterns[?]:
+enchant %~item stack% with %enchantment types%
+disenchant %~item stack%
+since:
+2.0
+Enchant or disenchant an existing item
+examples:
+enchant the player's tool with sharpness 5
+disenchant the player's tool
+Equip
+
+patterns[?]:
+equip [%living entity%] with %item types%
+make %living entity% wear %item types%
+since:
+1.0
+Equips a player with some given armor. This will replace any armor that the player is wearing. 
+Starting with Skript 2.1 mobs can be equipped with armour as well, pigs can be equipped with saddles, and horses can be equipped with saddles, horse armour, and chests.
+examples:
+equip player with diamond helmet
+equip player with all diamond armour
+equip the clicked horse with diamond horse armour and a saddle
+make the last spawned pig wear a saddle
+Exit
+
+patterns[?]:
+(exit|stop) [trigger]
+(section|loop|conditional)
+(section|loop|conditional)s
+(section|loop|conditional)s
+since:
+unknown
+Exits a given amount of loops and conditionals, or the entire trigger.
+examples:
+if player has any ore:
+	stop
+message "%player% has no ores!"
+loop blocks above the player:
+	loop-block is not air:
+		exit 2 sections
+	set loop-block to water
+Explosion
+
+patterns[?]:
+[(create|make)] [an] explosion (of|with) (force|strength|power) %number% [%directions% %locations%]
+[(create|make)] [a] safe explosion (of|with) (force|strength|power) %number% [%directions% %locations%]
+[(create|make)] [a] fake explosion [%directions% %locations%]
+[(create|make)] [an] explosion[ ]effect [%directions% %locations%]
+since:
+1.0
+Creates an explosion of a given force. The Minecraft Wiki has an article on explosions which lists the explosion forces of TNT, creepers, etc. 
+Use a force of 0 to create a fake explosion that does no damage whatsoever, or use the explosion effect introduced in Skript 2.0. 
+Starting with Bukkit 1.4.5 and Skript 2.0 you can also create "safe explosions" which will damage entities but won't destroy any blocks.
+examples:
+create an explosion of force 10 at the player
+create a fake explosion at the victim
+Ignite/Extinguish
+
+patterns[?]:
+(ignite|set fire to) %entities% [for %time span%]
+(set|light) %entities% on fire [for %time span%]
+extinguish %entities%
+since:
+1.4
+Lights entities on fire or extinguishes them.
+examples:
+ignite the player
+extinguish the player
+Kick
+
+patterns[?]:
+kick %players% [(by reason of|because [of]|on account of|due to) %text%]
+since:
+1.0
+Kicks a player from the server.
+examples:
+on place of TNT, lava, or obsidian:
+	kick the player due to "You may not place %block%!"
+	cancel the event
+Kill
+
+patterns[?]:
+kill %entities%
+since:
+1.0
+Kills one or more entities. 
+Note: This effect does not set the entity's health to 0 as that would make the entity disappear without the death animation and without dropping any items, but damages the entity by 100 times its maximum health.
+examples:
+kill the player
+kill all creepers in the player's world
+kill all endermen, witches and bats
+Lightning
+
+patterns[?]:
+[[ ]effect] %directions% %locations%
+since:
+1.4
+Strikes lightning at a given location. 
+You can use 'lightning effect' to create a lightning strike that does not harm entities or start fires (a fake fire block may be created for any client within range though).
+examples:
+strike lightning at the player
+strike lightning effect at the victim
+Log
+
+patterns[?]:
+log %texts% [(to|in) [file[s]] %texts%]
+since:
+2.0
+Writes text into a .log file. Skript will write these files to /plugins/Skript/logs.
+NB: Using 'server.log' as the log file will write to the default server log. Omitting the log file altogether will log the message as '[Skript] [<script>.sk] <message>' in the server log.
+examples:
+on place of TNT:
+	log "%player% placed TNT in %world% at %location of block%" to "tnt/placement.log"
+Message
+
+patterns[?]:
+(message|send [message]) %texts% [to %players/console%]
+since:
+1.0
+Sends a message to the given player.
+examples:
+message "A wild %player% appeared!"
+message "This message is a distraction. Mwahaha!"
+send "Your kill streak is %{kill streak.%player%}%." to player
+if the targeted entity exists:
+	message "You're currently looking at a %type of the targeted entity%!"
+op/deop
+
+patterns[?]:
+[de[-]]op %offline players%
+since:
+1.0
+Grant/revoke a user operator status.
+examples:
+op the player
+deop all players
+Open Inventory
+
+patterns[?]:
+[(open|show) ((crafting [table]|workbench) (view|window|inventory)]|%inventory%) (to|for) %players%
+close [the] inventory [view] (to|of|for) %players%
+close %players%'[s] inventory [view]
+since:
+2.0, 2.1.1 (closing)
+Opens or closes an inventory to a player. If opened, the player can then access and modify the inventory as if it was a chest that he just opened. Closing will close any inventory the player has currently open. 
+Please note that currently 'show' and 'open' have the same effect, but 'show' will eventually show an unmodifiable view of the inventory in the future.
+examples:
+show the victim's inventory to the player
+open the player's inventory for the player
+close the player's inventory
+Play Effect
+
+patterns[?]:
+(play|show) %visual effects% (on|%directions%) %entities/locations% [to %players%]
+since:
+2.1
+Plays a visual effect at a given location or on a given entity.
+Please note that some effects can only be played on entities, e..g wolf hearts or the hurt effect, and that these are always visible to all players.
+examples:
+play wolf hearts on the clicked wolf
+show mob spawner flames at the targeted block to the player
+Poison/Cure
+
+patterns[?]:
+poison %living entities% [for %time span%]
+(cure|unpoison) %living entities% [(from|of) poison]
+since:
+1.3.2
+Poison or cure a creature.
+examples:
+poison the player
+poison the victim for 20 seconds
+cure the player from poison
+Potion Effects
+
+patterns[?]:
+apply [potion of] %potions% [potion] [[[of] tier] %number%] to %living entities% [for %time span%]
+since:
+2.0
+Apply or remove potion effects to/from entities.
+examples:
+apply swiftness 2 to the player
+remove haste from the victim
+on join:
+	apply potion of strength of tier {strength.%player%} to the player for 999 days
+Push
+
+patterns[?]:
+(push|thrust) %entities% %direction% [(at|with) (speed|velocity|force) %number%]
+since:
+1.4.6
+Push entities around.
+examples:
+push the player upwards
+push the victim downwards at speed 0.5
+PvP
+
+patterns[?]:
+enable PvP [in %worlds%]
+disable PVP [in %worlds%]
+since:
+1.3.4
+Set the PvP status for a given world.
+examples:
+enable PvP #(current world only)
+disable PvP in all worlds
+Replace
+
+patterns[?]:
+replace [(all|every)] %texts% in %text% with %text%
+replace [(all|every)] %texts% with %text% in %text%
+since:
+2.0
+Replaces all occurrences of a given text with another text. Please note that you can only change variables and a few expressions, e.g. a message or a line of a sign.
+examples:
+replace "<item>" in {textvar} with "%tool of player%"
+replace every "&" with "§" in line 1
+# The following acts as a simple chat censor, but it will e.g. censor mass, hassle, assassin, etc. as well:
+on chat:
+	replace all "fuck", "bitch" and "ass" with "****" in the message
+Shear
+
+patterns[?]:
+shear %living entities%
+un[-]shear %living entities%
+since:
+2.0
+Shears or 'un-shears' a sheep. Please note that no wool is dropped, this only sets the 'sheared' state of the sheep.
+examples:
+on rightclick on a sheep holding a sword:
+	shear the clicked sheep
+Shoot
+
+patterns[?]:
+shoot %entity types% [from %living entities/locations%] [(at|with) (speed|velocity) %number%] [%direction%]
+(make|let) %living entities/locations% shoot %entity types% [(at|with) (speed|velocity) %number%] [%direction%]
+since:
+1.4
+Shoots a projectile (or any other entity) from a given entity.
+examples:
+shoot an arrow
+make the player shoot a creeper at speed 10
+shoot a pig from the creeper
+Spawn
+
+patterns[?]:
+spawn %entity types% [%directions% %locations%]
+spawn %number% of %entity types% [%directions% %locations%]
+since:
+1.0
+Spawns an entity.
+examples:
+spawn 3 creepers at the targeted block
+spawn a ghast 5 meters above the player
+Teleport
+
+patterns[?]:
+teleport %entities% (to|%direction%) %location%
+since:
+1.0
+Teleports an entity to a specific location. 
+If the location has a yaw or pitch set, the entity will be made facing that direction after the teleport, otherwise the entity will face the same direction as before.
+examples:
+teleport the player to {homes.%player%}
+teleport the attacker to the victim
+Toggle
+
+patterns[?]:
+(close|turn off|de[-]activate) %blocks%
+(toggle|switch) [[the] state of] %blocks%
+(open|turn on|activate) %blocks%
+since:
+1.4
+Toggles the state of a block, e.g. switches a lever or opens a door.
+examples:
+# use arrows to toggle levers, doors, etc.
+on projectile hit:
+    projectile is arrow
+    toggle the block at the arrow
+Tree
+
+patterns[?]:
+(grow|create|generate) tree [of type %tree type%] %directions% %locations%
+(grow|create|generate) %tree type% [tree] %directions% %locations%
+since:
+1.0
+Creates a tree. 
+This may require that there is enough space above the given location and that the block below is dirt/grass, but it is possible that the tree will just grow anyway, possibly replacing every block in its path.
+examples:
+grow a tall redwood tree above the clicked block
+Vehicle
+
+patterns[?]:
+(make|let|force) %entities% [to] (ride|mount) [(in|on)] %entity/entity types%
+[(make|let|force) %entities% [to] (dismount|(dismount|leave) (from|of)] [(any|the[ir]|his|her)] vehicle[s])
+[(eject|dismount) (any|the)] passenger[s] (of|from) %entities%
+since:
+2.0
+Makes an entity ride another entity, e.g. a minecart, a saddled pig, an arrow, etc.
+examples:
+make the player ride a saddled pig
+make the attacker ride the victim
+About
+~ njol.ch created by Peter Güttinger ~ icons by Yusuke Kamiyamane ~ 
+Last modified: Freyja's Day, 9th August 2013, 09:42
