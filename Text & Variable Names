@@ -1,0 +1,31 @@
+Njol.ch
+»
+Projects
+»
+SkriptYggdrasilMarkup
+»
+DocumentationTutorialAPIStatistics
+»
+Skript: Text & Variable Names
+
+EventsConditionsEffectsExpressionsLoopsCustom CommandsTypesTextVariables
+Using text in scripts can be really simple, e.g. to send ‘Hello!’ to some player you can use send "Hello!" to player. As you can see you have to put double quotes around whatever text you want to use (to include a double quote you'll have to double it: "What's this ""thing"" you're talking about?"). Often you'll want to include e.g. the player's name in a text which can be done by inserting %player% where you want the player's name to appear, e.g. send "Hello %player%!" to player would send ‘Hello Njol!’ to me. You can put all expressions between such percent signs, e.g. message "The block above the block you're looking at is a %block above targeted block%". Similar to quotes you have to double the percent sign if you want to use one in a text: "100%%!".
+Chat Colours and Styles
+
+Colours and chat styles can be included in messages in two different ways: Either with the common ‘&x’/‘§x’ colour codes or by using Skript's <colour> codes, e.g. broadcast "<red><bold>Important Information:<reset> <blue><u>This server needs more mods!". You can also use the colour of an item in a message, e.g. message "<%colour of tool%>this text is coloured depending on the player's held item!".
+
+The default english colours and chat styles are:
+colours: black, dark grey/dark gray, grey/light grey/gray/light gray/silver, white, blue/dark blue, cyan/aqua/dark cyan/dark aqua, light blue/light cyan/light aqua, green/dark green, light green/lime/lime green, yellow/light yellow, orange/gold/dark yellow, red/dark red, pink/light red, purple/dark purple, magenta/light purple, brown/indigo
+chat styles: bold/b, italics/italic/i, strikethrough/strike/s, underlined/underline/u, magic, reset/r
+Other languages may use other colours, but those are only used rarely, e.g. by the colour expression (useful to colour command arguments), as scripts always use the english colour codes.
+Advanced Syntax
+
+Skript version 2.0 and above can handle nouns more advanced than by simply inserting them into the text:
+"a %expression" or "an %expression" will add the appropriate indefinite article to the expression, e.g. “a fish”, “an apple”, or “a pickaxe and an emerald”. The same applies to the definite article ‘the’ ("the %expression%"), though this is barely noticeable in the english language, only some nouns like ‘air’ will completely remove the article in this case. Please note that for other languages you'll have to use that language's articles, e.g. "der %expression" or "ein %expression%" in german.
+"%expression%s" as well as "<number> %expression%" (for numbers other than 1) causes the expression to be displayed as plural, e.g. "2 %block%" can result in “2 logs” (the number can also be another expression, e.g. "%number-argument% %item-argument%" could turn into “5 pickaxes” or “1 pickaxe”). Unlike articles this syntax is the same for all languages.
+Variable Names
+
+Variable names are very similar to text, except that you have to enclose them in curly brackets instead of double quotes: {variable}. Expressions also do not use the advanced syntax described above as that's useless in a variable's name.
+About
+~ njol.ch created by Peter Güttinger ~ icons by Yusuke Kamiyamane ~ 
+Last modified: Freyja's Day, 17th January 2014, 22:39
