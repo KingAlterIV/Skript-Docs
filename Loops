@@ -1,0 +1,37 @@
+Njol.ch
+»
+Projects
+»
+SkriptYggdrasilMarkup
+»
+DocumentationTutorialAPIStatistics
+»
+Skript: Loops
+
+EventsConditionsEffectsExpressionsLoopsCustom CommandsTypesTextVariables
+Please note that this is the old documentation on the last version of Skript I released.
+If you use a fork of Skript, please refer to that fork's documentation to find all new & updated information.
+A Loop is a construct that repeats code for multiple values. A typical loop looks like this:
+loop <expression to loop>:
+	<condition(s)>
+	<effect(s)>
+A loop will loop through all elements of the given expression, e.g. all players, worlds, items, etc. The conditions & effects inside the loop will be executed for every of those elements, which can be accessed with ‘loop-<what>’, e.g. send "hello" to loop-player. When a condition inside a loop is not fulfilled the loop will start over with the next element of the loop. You can however use stop loop to exit the loop completely and resume code execution after the end of the loop.
+
+Simple loops can often be replaced with a single condition or effect by including the looped expression in it, e.g. use give a torch to all players instead of looping all players and giving them a torch individually.
+Loopable Values
+
+All expressions that represent more than one value, e.g. ‘all players’, ‘worlds’, etc., as well as list variables, can be looped. You can also use a list of expressions, e.g. loop the victim and the attacker, to execute the same code for only a few values.
+List Variables
+
+When looping list variables, you can also use loop-index in addition to loop-value inside the loop. loop-value is the value of the currently looped variable, and loop-index is the last part of the variable's name (the part where the list variable has its asterisk *). The following example will increase all values inside a list variable by one:
+loop {var::*}:
+	set {var::%loop-index%} to loop-value + 1
+While Loops
+
+Starting with version 2.0 you can use while loops, i.e. loops that will just keep repeating as long as a condition is met. A while loop looks like this:
+while <condition>:
+	<code>
+Please be careful with this kind of loop, as it will keep running infinitely if the condition is always met.
+About
+~ njol.ch created by Peter Güttinger ~ icons by Yusuke Kamiyamane ~ 
+Last modified: Saturn's Day, the 15th of March 2014
