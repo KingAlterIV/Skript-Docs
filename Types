@@ -1,0 +1,559 @@
+Njol.ch
+»
+Projects
+»
+SkriptYggdrasilMarkup
+»
+DocumentationTutorialAPIStatistics
+»
+Skript: Types
+
+EventsConditionsEffectsExpressionsLoopsCustom CommandsTypesTextVariables
+Table of Contents
+Biome
+Block
+Boolean
+Chunk
+Colour
+Command Sender
+Damage Cause
+Date
+Direction
+Enchantment
+Enchantment Type
+Entity
+Entity Type
+Entity Type with Amount
+Experience
+Game Mode
+Inventory
+Inventory Slot
+Item / Material
+Item Type
+Living Entity
+Location
+Money
+Number
+Object
+Offlineplayer
+Player
+Potion Effect Type
+Projectile
+Region
+Text
+Time
+Timeperiod
+Timespan
+Tree Type
+Type
+Visual Effect
+Weather Type
+World
+Filter for version: 
+ =>
+This is a list of most types that Skript uses (types that are not listed are not needed by the user). A type is a kind of object, e.g. player, number, or text.
+Many types can be used as command arguments (‘<type>’, e.g. <number>) and almost all types can be used as loop-values (‘loop-type’, e.g. loop-block). The patterns listed for each type below reference to this.
+The usage listed above the patterns for each type describe how you can define an instance of the type in a script, e.g. how to include text properly or how to write a number. The usage does usually not include any expressions that represent an instance of the type, e.g. blocks cannot be defined in a script, but you can use one of the many block expressions to get a block.
+Biome
+
+type usage:
+swampland, forest, taiga, desert, plains, hell, sky, ocean, river, extreme hills, frozen ocean, frozen river, ice plains, ice mountains, mushroom island, mushroom shore, beach, desert hills, forest hills, taiga hills, small mountains, jungle, jungle hills
+type name patterns[?]:
+biome[s]
+since:
+1.4.4
+All possible biomes Minecraft uses to generate a world.
+examples:
+biome at the player is desert
+Block
+
+type usage:
+cannot be written in scripts
+type name patterns[?]:
+block[s]
+since:
+1.0
+A block in a world. It has a location and a type, and can also have a direction (mostly a facing), an inventory, or other special properties.
+Boolean
+
+type usage:
+true/yes/on or false/no/off
+type name patterns[?]:
+boolean[s]
+since:
+1.0
+A boolean is a value that is either true or false. Other accepted names are 'on' and 'yes' for true, and 'off' and 'no' for false.
+examples:
+set {config.%player%.use mod} to false
+Chunk
+
+type usage:
+cannot be written in scripts
+type name patterns[?]:
+chunk[s]
+since:
+2.0
+A chunk is a cuboid of 16×16×<world height> (x×z×y) blocks (the world height is usually 128 or 256). Chunks are spread on a fixed rectangular grid in their world, where the chunk (0,0) contains the blocks (0,0,0) to (15,15,<world height> - 1).
+Colour
+
+type usage:
+black, dark grey/dark gray, grey/light grey/gray/light gray/silver, white, blue/dark blue, cyan/aqua/dark cyan/dark aqua, light blue/light cyan/light aqua, green/dark green, light green/lime/lime green, yellow/light yellow, orange/gold/dark yellow, red/dark red, pink/light red, purple/dark purple, magenta/light purple, brown/indigo
+type name patterns[?]:
+colo[u]r[s]
+since:
+unknown
+Wool, dye and chat colours. 
+Please note that the same colours are used for chat and wool so that you can use any colour expression to colour chat, e.g. message "<%colour of sheep%>this colour". Minecraft however uses slightly different colours for chat and sheep, with the main difference being that there exists no brown chat colour, but there exists another blue one instead, thus 'brown' and 'indigo' are the same colour.
+examples:
+color of the sheep is red or black
+set the colour of the block to green
+message "You're holding a <%color of tool%>%color of tool%<reset> wool block"
+Command Sender
+
+type usage:
+use the console for the console
+see player for players.
+type name patterns[?]:
+[command[s]][ ](sender|executor)[s]
+since:
+1.0
+A player or the console.
+examples:
+on command /pm:
+	command sender is not the console
+	chance of 10%
+	give coal to the player
+	message "You got a piece of coal for sending that PM!"
+Damage Cause
+
+type usage:
+contact, attack, projectile, suffocation, fall, fire, burning, melting, lava, drowning, block explosion, entity explosion, void, lightning, suicide, starvation, poison, potion, wither, falling block, thorns, unknown
+type name patterns[?]:
+damage cause[s]
+since:
+2.0
+The cause/type of a damage event, e.g. lava, fall, fire, drowning, explosion, poison, etc.
+Please note that support for this type is very rudimentary, e.g. lava, fire and burning, as well as projectile and attack are considered different types.
+Date
+
+type usage:
+cannot be written in scripts
+type name patterns[?]:
+date[s]
+since:
+1.4
+A date is a certain point in the real world's time which can currently only be obtained with now.
+See time and timespan for the other time types of Skript.
+examples:
+set {_yesterday} to now
+subtract a day from {_yesterday}
+# now {_yesterday} represents the date 24 hours before now
+Direction
+
+type usage:
+see direction (expression)
+type name patterns[?]:
+direction[s]
+since:
+2.0
+A direction, e.g. north, east, behind, 5 south east, 1.3 meters to the right, etc.
+Locations and some blocks also have a direction, but without a length.
+Please note that directions have changed extensively in the betas and might not work perfectly. They can also not be used as command arguments.
+examples:
+set the block below the victim to a chest
+loop blocks from the block infront of the player to the block 10 below the player:
+	set the block behind the loop-block to water
+Enchantment
+
+type usage:
+protection, respiration, punch, projectile protection, smite, fortune, infinity, feather falling, flame, knockback, sharpness, aqua affinity, looting, fire aspect, silk touch, blast protection, power, thorns, efficiency, fire protection, bane of arthropods, unbreaking, luck of the sea, lure
+type name patterns[?]:
+enchantment[s]
+since:
+1.4.6
+An enchantment, e.g. 'sharpness' or 'fortune'. Unlike enchantment type this type has no level, but you usually don't need to use this type anyway.
+Enchantment Type
+
+type usage:
+<enchantment> [<level>]
+type name patterns[?]:
+enchant(ing|ment) type[s]
+since:
+1.4.6
+An enchantment with an optional level, e.g. 'sharpness 2' or 'fortune'.
+examples:
+enchant the player's tool with sharpness 5
+helmet is enchanted with waterbreathing
+Entity
+
+type usage:
+player, op, wolf, tamed ocelot, powered creeper, zombie, unsaddled pig, fireball, arrow, dropped item, item frame, etc.
+type name patterns[?]:
+entit(y|ies)
+since:
+1.0
+An entity is something in a world that's not a block, e.g. a player, a skeleton, or a zombie, but also projectiles like arrows, fireballs or thrown potions, or special entities like dropped items, falling blocks or paintings.
+examples:
+entity is a zombie or creeper
+player is an op
+projectile is an arrow
+shoot a fireball from the player
+Entity Type
+
+type usage:
+Detailed usage will be added eventually
+type name patterns[?]:
+entity[ ]type[s]
+since:
+1.3
+The type of an entity, e.g. player, wolf, powered creeper, etc.
+examples:
+victim is a cow
+spawn a creeper
+targeted entity is an enderman holding a rose
+spawn 10 red, green or blue sheep
+spawn a falling anvil 4 meters above the player
+kill all skeleton horses in all worlds
+Entity Type with Amount
+
+type usage:
+<number> <entity type>
+type name patterns[?]:
+cannot be used directly
+since:
+1.3
+An entity type with an amount, e.g. '2 zombies'. I might remove this type in the future and make a more general 'type' type, i.e. a type that has a number and a type.
+examples:
+spawn 5 creepers behind the player
+Experience
+
+type usage:
+[<number>] ([e]xp|experience)
+type name patterns[?]:
+cannot be used directly
+since:
+2.0
+Experience points. Please note that Bukkit only allows to give XP, but not remove XP from players. You can however change a player's level and level progress freely.
+examples:
+give 10 xp to the player
+Game Mode
+
+type usage:
+creative/survival/adventure
+type name patterns[?]:
+game[ ]mode[s]
+since:
+1.0
+The game modes survival, creative and adventure.
+examples:
+player's gamemode is survival
+set the player argument's game mode to creative
+Inventory
+
+type usage:
+cannot be written in scripts
+type name patterns[?]:
+inventor(y|ies)
+since:
+1.0
+An inventory of a player or block. Inventories have many effects and conditions regarding the items contained.
+An inventory has a fixed amount of slots which represent a specific place in the inventory, e.g. the helmet slot for players (Please note that slot support is still very limited but will be improved eventually).
+Inventory Slot
+
+type usage:
+cannot be written in scripts
+type name patterns[?]:
+[inventory ]slot[s]
+since:
+unknown
+Represents a single slot of an inventory. Notable slots are the armour slots and furnace slots. 
+The most important property that distinguishes a slot from an item is its ability to be changed, e.g. it can be set, deleted, enchanted, etc. (Some item expressions can be changed as well, e.g. items stored in variables. Speaking of which: slots are never saved to variables, only the items they represent at the time when the variable is set). 
+Please note that the tool is a slot, but it can actually change its position, i.e. doesn't always represent the same slot.
+examples:
+set tool of player to dirt
+delete helmet of the victim
+set the colour of the player's tool to green
+enchant the player's chestplate with projectile protection 5
+Item / Material
+
+type usage:
+[<number> [of]] <alias> [of <enchantment> <level>], Where <alias> must be an alias that represents exactly one item (i.e cannot be a general alias like 'sword' or 'plant')
+type name patterns[?]:
+item
+material
+since:
+1.0
+An item, e.g. a stack of torches, a furnace, or a wooden sword of sharpness 2. Unlike item type an item can only represent exactly one item (e.g. an upside-down cobblestone stair facing west), while an item type can represent a whole range of items (e.g. any cobble stone stairs regardless of direction).
+You don't usually need this type except when you want to make a command that only accepts an exact item.
+Please note that currently 'material' is exactly the same as 'item', i.e. can have an amount & enchantments.
+examples:
+set {_item} to type of the targeted block
+{_item} is a torch
+Item Type
+
+type usage:
+[<number> [of]] [all/every] <alias> [of <enchantment> [<level>] [,/and <more enchantments...>]]
+type name patterns[?]:
+item[ ]type[s]
+items
+materials
+since:
+1.0
+An item type is an alias, e.g. 'a pickaxe', 'all plants', etc., and can result in different items when added to an inventory, and unlike items they are well suited for checking whether an inventory contains a certain item or whether a certain item is of a certain type.
+An item type can also have one or more enchantments with or without a specific level defined, and can optionally start with 'all' or 'every' to make this item type represent all types that the alias represents, including data ranges.
+examples:
+give 4 torches to the player
+add all slabs to the inventory of the block
+player's tool is a diamond sword of sharpness
+remove a pickaxes of fortune 4 from {stored items::*}
+set {_item} to 10 of every upside-down stair
+block is dirt or farmland
+Living Entity
+
+type usage:
+see entity, but ignore inanimate objects
+type name patterns[?]:
+living[ ]entit(y|ies)
+since:
+1.0
+A living entity, e.g. a mob or player, not inanimate entities like projectiles or dropped items.
+examples:
+spawn 5 powered creepers
+shoot a zombie from the creeper
+Location
+
+type usage:
+See location at (expression)
+type name patterns[?]:
+location[s]
+since:
+1.0
+A location in a world. Locations are world-specific and even store a direction, e.g. if you save a location and later teleport to it you will face the exact same direction you did when you saved the location. 
+
+In the case of the teleport effect you can set a location's yaw and pitch to 0 to prevent this behaviour.
+Money
+
+type usage:
+<number> $ or $ <number>, where '$' is your server's currency, e.g. '10 rupees' or '£5.00'
+type name patterns[?]:
+cannot be used directly
+since:
+2.0
+A certain amount of money. Please note that this differs from numbers as it includes a currency symbol or name, but usually the two are interchangeable, e.g. you can both add 100$ to the player's balance and add 100 to the player's balance. 
+
+Like all economy elements, this type requires that Vault and a compatible economy plugin is installed.
+examples:
+add 10£ to the player's account
+remove Fr. 9.95 from the player's money
+set the victim's money to 0
+increase the attacker's balance by the level of the victim * 100
+Number
+
+type usage:
+[-]###[.###] (any amount of digits; very large numbers will be truncated though)
+type name patterns[?]:
+num[ber][s]
+since:
+1.0
+A number, e.g. 2.5, 3, or -9812454.
+Please note that many expressions only need integers, i.e. will discard any frational parts of any numbers without producing an error.
+examples:
+set the player's health to 5.5
+set {_temp} to 2*{_temp} - 2.5
+Object
+
+type usage:
+cannot be written in scripts
+type name patterns[?]:
+cannot be used directly
+since:
+1.0
+The supertype of all types, meaning that if %object% is used in e.g. a condition it will accept all kinds of expressions.
+Offlineplayer
+
+type usage:
+cannot be written in scripts
+type name patterns[?]:
+offline[ ]player[s]
+since:
+unknown
+A player that is possibly offline. See player for more information. Please note that while all effects and conditions that require a player can be used with an offline player as well, they will not work if the player is not actually online.
+Player
+
+type usage:
+cannot be written in scripts
+type name patterns[?]:
+player[s]
+since:
+1.0
+A player. Depending on whether a player is online or offline several actions can be performed with them, though you won't get any errors when using effects that only work if the player is online (e.g. changing his inventory) on an offline player.
+You have two possibilities to use players as command arguments: <player> and <offline player>. The first requires that the player is online and also accepts only part of the name, while the latter doesn't require that the player is online, but the player's name has to be entered exactly.
+Potion Effect Type
+
+type usage:
+speed, slowness, haste, mining fatigue, strength, instant health, instant damage, jump boost, nausea, regeneration, resistance, fire resistance, water breathing, invisibility, blindness, night vision, hunger, weakness, poison, wither
+type name patterns[?]:
+potion[[ ]effect][[ ]type][s]
+since:
+unknown
+A potion effect, e.g. 'strength' or 'swiftness'.
+examples:
+apply swiftness 5 to the player
+apply potion of speed 2 to the player for 60 seconds
+remove invisibility from the victim
+Projectile
+
+type usage:
+arrow, fireball, snowball, thrown potion, etc.
+type name patterns[?]:
+projectile[s]
+since:
+1.0
+A projectile, e.g. an arrow, snowball or thrown potion.
+examples:
+projectile is a snowball
+shoot an arrow at speed 5 from the player
+Region
+
+type usage:
+"region name"
+type name patterns[?]:
+cannot be used directly
+since:
+2.1
+A region of a regions plugin. Skript currently supports WorldGuard, Factions, GriefPrevention and PreciousStones.
+Please note that some regions plugins do not have named regions, some use numerical ids to identify regions, and some may have regions with the same name in different worlds, thus using regions like "region name" in scripts may or may not work.
+Text
+
+type usage:
+simple: "..."
+quotes: "...""..."
+expressions: "...%expression%..."
+percent signs: "...%%..."
+type name patterns[?]:
+(text|string)[s]
+since:
+1.0
+Text is simply text, i.e. a sequence of characters, which can optionally contain expressions which will be replaced with a meaningful representation (e.g. %player% will be replaced with the player's name).
+Because scripts are also text, you have to put text into double quotes to tell Skript which part of the line is an effect/expression and which part is the text.
+Please read the article on Texts and Variable Names to learn more.
+examples:
+broadcast "Hello World!"
+message "Hello %player%"
+message "The id of ""%type of tool%"" is %id of tool%."
+Time
+
+type usage:
+##:##
+##[:##][ ]am/pm
+type name patterns[?]:
+time[s]
+since:
+1.0
+A time is a point in a minecraft day's time (i.e. ranges from 0:00 to 23:59), which can vary per world.
+See date and timespan for the other time types of Skript.
+examples:
+at 20:00:
+	time is 8 pm
+	broadcast "It's %time%"
+Timeperiod
+
+type usage:
+##:## - ##:##
+dusk/day/dawn/night
+type name patterns[?]:
+time[ ]period[s]
+duration[s]
+since:
+1.0
+A period of time between two times. Mostly useful since you can use this to test for whether it's day, night, dusk or dawn in a specific world.
+This type might be removed in the future as you can use 'time of world is between x and y' as a replacement.
+examples:
+time in world is night
+Timespan
+
+type usage:
+<number> [minecraft/mc/real/rl/irl] ticks/seconds/minutes/hours/days [[,/and] <more...>]
+[###:]##:##[.####] ([hours:]minutes:seconds[.milliseconds])
+type name patterns[?]:
+time[ ]span[s]
+since:
+1.0
+A timespan is a difference of two different dates or times, e.g '10 minutes'. Timespans are always displayed as real life time, but can be defined as minecraft time, e.g. '5 minecraft days and 12 hours'.
+See date and time for the other time types of Skript.
+examples:
+every 5 minecraft days:
+	wait a minecraft second and 5 ticks
+every 10 mc days and 12 hours:
+	halt for 12.7 irl minutes, 12 hours and 120.5 seconds
+Tree Type
+
+type usage:
+[any] <general tree/mushroom type>, e.g. tree/any jungle tree/etc.
+<specific tree/mushroom species>, e.g. red mushroom/small jungle tree/big regular tree/etc.
+type name patterns[?]:
+tree[ ]type[s]
+tree[s]
+since:
+unknown
+A tree type represents a tree species or a huge mushroom species. These can be generated in a world with the generate tree effect.
+examples:
+grow any regular tree at the block
+grow a huge red mushroom above the block
+Type
+
+type usage:
+See the type name patterns of all types - including this one
+type name patterns[?]:
+type[s]
+since:
+2.0
+Represents a type, e.g. number, object, item type, location, block, world, entity type, etc.
+This is mostly used for expressions like 'event-<type>', '<type>-argument', 'loop-<type>', etc., e.g. event-world, number-argument and loop-player.
+examples:
+{variable} is a number # check whether the variable contains a number, e.g. -1 or 5.5
+{variable} is a type # check whether the variable contains a type, e.g. number or player
+{variable} is an object # will always succeed if the variable is set as everything is an object, even types.
+disable PvP in the event-world
+kill the loop-entity
+Visual Effect
+
+type usage:
+ender signal, mobspawner flames, potion break, smoke, hurt, sheep eating, wolf hearts, wolf shaking, wolf smoke
+type name patterns[?]:
+(visual|particle) effect[s]
+since:
+2.1
+A visible effect, e.g. particles.
+examples:
+show wolf hearts on the clicked wolf
+play mob spawner flames at the targeted block to the player
+Weather Type
+
+type usage:
+clear/sun/sunny, rain/rainy/raining, and thunder/thundering/thunderstorm
+type name patterns[?]:
+weather[ ]type[s]
+weather condition[s]
+weather[s]
+since:
+1.0
+The weather types sunny, rainy, and thundering.
+examples:
+is raining
+is sunny in the player's world
+message "It is %weather in the argument's world% in %world of the argument%"
+World
+
+type usage:
+"world_name", e.g. "world"
+type name patterns[?]:
+world[s]
+since:
+1.0
+One of the server's worlds. Worlds can be put into scripts by surrounding their name with double quotes, e.g. "world_nether", but this might not work reliably as text uses the same syntax.
+examples:
+broadcast "Hello!" to "world_nether"
+About
+~ njol.ch created by Peter Güttinger ~ icons by Yusuke Kamiyamane ~ 
+Last modified: Freyja's Day, 9th August 2013, 09:43
