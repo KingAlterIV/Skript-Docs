@@ -1,0 +1,87 @@
+Njol.ch
+»
+Projects
+»
+SkriptYggdrasilMarkup
+»
+DocumentationTutorialAPIStatistics
+»
+Skript: Variables
+
+EventsConditionsEffectsExpressionsLoopsCustom CommandsTypesTextVariables
+Variables are Skript's way to save data. Every variable has a name and a value, i.e. some stored data. You can put variables anywhere in your triggers to replace something, e.g. you can replace a location with a variable that holds a location.
+This can for example be used for a /home command: make a variable ‘home’ and a command /home which teleports the player to the location stored in the ‘home’ variable.
+To distinguish variables from the rest of the trigger their name has to be put in curly brackets like this: {variable name}. A variable's name can also contain expressions, e.g. to make a ‘home’ variable for every player you can make a variable like {home.%player%} where %player% will be replaced by the player's name every time the variable is used, which essentially creates a ‘home’ variable that is different for every player.
+
+All variables are saved in a file called ‘variables.csv’ in the plugin's folder. Please do not edit the file manually, if you do something wrong you might wipe out some variables. The variables are written to this file constantly, so a server crash will make you loose at most one variable. Starting with version 2.0 you can also choose to save variables in a database which can also be monitored for changes, e.g. if you have multiple servers and want to synchronize variables between them.
+
+There are 3 different kinds of variables: ‘normal’ variables, local variables and options. Normal variables (usually simply called variables) are unique, i.e. there can only exist one variable with the same name, and they are saved between server restarts.
+Local variables (which are identified with an underscore: {_local variable}) are ‘local to the event’, which means that there can exist several of these variables with the same name simultaneously, e.g. the following trigger will send a player his name one minute after he joined:
+on join:
+  set {_player} to player
+  wait a minute
+  message "%{_player}%" # the local variable is unchanged no matter how many players joined in the meantime
+If a normal variable was used all players would recieve the name of the last player who joined since normal variables are unique.
+Local variables are also automatically deleted when they are not needed anymore and do not clutter the variables file, but their data is lost when the server stops (which does not matter that much as all scripts also stop running and won't resume where they left off when the server restarts).
+The last kind of variables are options which are not actually variables at all. You can add a section ‘options’ to your script like this:
+options:
+  option name = option value
+You can then use these options anywhere in your scripts with {@option name}. The reason why I stress anywhere is because options will be replaced one-to-one with their values just before the script is parsed. Thus you can put anything into options, even whole script lines or parts thereof. Remember to not use percent signs around options in text though as the percent signs will remain.
+List Variables
+
+List variables are variables which can hold multiple values. They look like {variable name::*} and can have elements added and removed from them using the default add and remove effects, can be deleted which will clear all values of the list, and overwritten with new values with the set effect. You can access a specific value of a list variable with {variable name::index} where ‘index’ is the index of the value you want. The index can be anything, e.g. a player name or a number, but when adding values to the list with the add effect the index of the new value will be a number.
+
+List variables can be looped with loop {list variable::*}. Within the loop the currently looped value can be accessed with loop-value and its index with loop-index.
+
+List variables are also useful to show a list in a message, e.g. a list of all admins online, by first adding them to the same list variable and then using that variable in the message (see the last example below). Using a local list variable for this purpose is recommended: {_local list variable::*}
+Examples
+
+As I'm not very good at explaining the rest of this page is filled with some examples:
+
+Save how many players have ever logged into your server:
+# if you add a 'variables:' section to your script, the variables defined there will be set to the given value if they don't exist
+# when the script is loaded. You cannot change an existing variable's value this way however, in particular if you
+# change the variables' values here the actual variables will not be changed at all.
+variables:
+	{logincount} = 0
+ 
+on login:
+	add 1 to {logincount}
+ 
+command /logincount:
+	description: Find out how many people have ever logged into this server
+	trigger:
+		message "Since its beginnings <green>%{logincount}%<reset> people have logged into this server"
+
+A simple /home plugin:
+command /sethome:
+	permission: skript.home
+	description: Set your home
+	trigger:
+		set {home.%player%} to location of player
+		message "Set your home to <grey>%location of player%<reset>"
+ 
+command /home:
+	permission: skript.home
+	description: Teleport yourself to your home
+	trigger:
+		if {home.%player%} is not set:
+			message "You have not set your home yet!"
+			stop trigger
+		teleport player to {home.%player%}
+
+A command that shows the currently online staff:
+command /staff:
+	description: Shows online staff
+	trigger:
+		loop all players:
+			loop-player has permission "is.staff"
+			add loop-player to {_online staff::*}
+ 
+		size of {_online staff::*} is 0:
+			message "No staff currently online! Happy griefing ;)!"
+		else:
+			message "Online staff: %{_online staff::*}%"
+About
+~ njol.ch created by Peter Güttinger ~ icons by Yusuke Kamiyamane ~ 
+Last modified: Freyja's Day, 17th January 2014, 22:50
